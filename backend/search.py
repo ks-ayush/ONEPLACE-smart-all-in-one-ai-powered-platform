@@ -31,41 +31,6 @@ class SearchRequest(BaseModel):
     query: str
 
 
-# def generate_ai_message(user_query, products):
-#     """Call Hugging Face LLM for a friendly natural response (plain text, no markdown)."""
-#     context = "\n".join([
-#         f"{p['title']} ({p['store']}) - ₹{p['price_inr']}: {p['description']}. Product link: {p['product_url']}"
-#         for p in products
-#     ])
-
-#     prompt = f"""
-# You are a helpful AI shopping assistant helping a customer find the best product.
-
-# User asked: "{user_query}"
-
-# Here are some matching products:
-# {context}
-
-# Write a short, natural language recommendation mentioning one or two top options.
-# Do not use markdown or special formatting. Include the product link directly in text.
-# """
-
-#     headers = {
-#         "Authorization": f"Bearer {HF_API_KEY}",
-#         "Content-Type": "application/json"
-#     }
-
-#     data = {"inputs": prompt, "parameters": {"max_new_tokens": 150, "temperature": 0.7}}
-
-#     response = requests.post(
-#         f"https://router.huggingface.co/hf-inference/models/{MODEL_NAME}",
-#         headers=headers,
-#         json=data
-#     )
-
-#     result = response.json()
-#     return result[0]["generated_text"] if isinstance(result, list) else "I'm sorry, I couldn’t generate a response."
-
 def generate_ai_message(user_query, products):
     """Generate a natural text response using Cohere Chat API (no markdown)."""
     if not products:
@@ -73,7 +38,6 @@ def generate_ai_message(user_query, products):
 
     context = "\n".join([
         f"{p['title']} ({p['store']}) - ₹{p['price_inr']}: {p['description']}. "
-        f"Product link: {p['product_url']}"
         for p in products
     ])
 
@@ -94,68 +58,13 @@ Do not use markdown, bullet points, or emojis. Include product links directly in
             model="command-r-plus-08-2024",  
             message=prompt,
             temperature=0.6,
-            max_tokens=150,
+            max_tokens=200,
         )
         return response.text.strip()
     except Exception as e:
         print("Cohere API error:", e)
         return "Sorry, I couldn’t generate a response right now."
 
-
-    
-# def generate_ai_message(user_query, products):
-#     """Call Hugging Face LLM for a friendly natural response (plain text, no markdown)."""
-#     if not products:
-#         return "No matching products found to suggest."
-
-#     context = "\n".join([
-#         f"{p['title']} ({p['store']}) - ₹{p['price_inr']}: {p['description']}. Product link: {p['product_url']}"
-#         for p in products
-#     ])
-
-#     prompt = f"""
-# You are a helpful AI shopping assistant helping a customer find the best product.
-
-# User asked: "{user_query}"
-
-# Here are some matching products:
-# {context}
-
-# Write a short, natural language recommendation mentioning one or two top options.
-# Do not use markdown or special formatting. Include the product link directly in text.
-# """
-
-#     headers = {
-#         "Authorization": f"Bearer {HF_API_KEY}",
-#         "Content-Type": "application/json"
-#     }
-
-#     data = {"inputs": prompt, "parameters": {"max_new_tokens": 150, "temperature": 0.7}}
-
-#     try:
-#         response = requests.post(
-#             f"https://router.huggingface.co/hf-inference/v1/models/{MODEL_NAME}",
-#             headers=headers,
-#             json=data,
-#             timeout=30
-#         )
-#         response.raise_for_status()  
-#         result = response.json()
-        
-#         if isinstance(result, list) and "generated_text" in result[0]:
-#             return result[0]["generated_text"]
-#         elif isinstance(result, dict) and "generated_text" in result:
-#             return result["generated_text"]
-#         else:
-#             return "I'm sorry, I couldn’t generate a response."
-#     except requests.exceptions.RequestException as e:
-        
-#         print("Hugging Face API request failed:", e)
-#         return "I'm sorry, I couldn’t generate a response due to a network error."
-#     except ValueError as e:
-        
-#         print("JSON decode failed:", e, response.text)
-#         return "I'm sorry, I couldn’t generate a response due to invalid data from API."
 
 
 

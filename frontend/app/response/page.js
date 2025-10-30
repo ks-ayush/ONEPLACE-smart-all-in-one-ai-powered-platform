@@ -8,20 +8,7 @@ const ResponsePage = () => {
     const [aiResponse, setAiResponse] = useState("");
     const [loading, setLoading] = useState(false);
 
-    //   const handleSearch = async () => {
-    //     if (!query.trim()) return;
-    //     setLoading(true);
-    //     try {
-    //       const res = await axios.get(`http://127.0.0.1:8000/api/search?q=${query}`);
-    //       setProducts(res.data.products || []);
-    //       setAiResponse(res.data.ai_response || "No AI suggestions found.");
-    //     } catch (err) {
-    //       console.error(err);
-    //       setAiResponse("Error fetching data.");
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   };
+    
 
     const handleSearch = async () => {
         if (!query.trim()) return;
@@ -43,17 +30,17 @@ const ResponsePage = () => {
         <main className="bg-black min-h-screen text-white px-6 py-8">
             <h1 className="text-3xl font-bold mb-6 text-center">Smart Product Search</h1>
 
-            <div className="flex justify-center mb-8 gap-2 ">
+            <div className="flex flex-col sm:flex-row justify-center mb-8 gap-2">
                 <input
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search for products like 'budget hoodies'..."
-                    className="w-1/2 p-2 rounded-lg text-black bg-amber-50 outline-none"
+                    className="w-full sm:w-1/2 p-2 rounded-lg text-black bg-amber-50 outline-none"
                 />
                 <button
                     onClick={handleSearch}
-                    className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="w-full sm:w-auto bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700"
                 >
                     Search
                 </button>
@@ -77,7 +64,7 @@ const ResponsePage = () => {
                         <img
                             src={p.image_url}
                             alt={p.title}
-                            className="w-full h-48 object-cover rounded-lg mb-3"
+                            className="w-full h-48 sm:h-56 md:h-48 lg:h-56 object-cover rounded-lg mb-3"
                         />
                         <h3 className="text-lg font-semibold">{p.title}</h3>
                         <p className="text-sm text-gray-400">{p.store}</p>

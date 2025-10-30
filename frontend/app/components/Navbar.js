@@ -13,7 +13,7 @@ const Navbar = () => {
                     <Link href={"/"}><li className='text-white px-4 py-3 hover:underline cursor-pointer'>Home</li></Link>
                     <Link href={"/signin"}><li className='text-white px-4 py-3 hover:underline cursor-pointer'>Signin</li></Link>
                     <Link href={"/signup"}><li className='text-white px-4 py-3 hover:underline cursor-pointer'>Signup</li></Link>
-                    {/* <Link href={"/dashboard"}><li className='text-white px-4 py-3 hover:underline cursor-pointer'>Dashboard</li></Link> */}
+                   
                 </ul>
             </div>
         </nav>
