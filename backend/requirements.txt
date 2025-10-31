@@ -3,8 +3,5 @@ uvicorn==0.38.0
 qdrant-client==1.15.1
 sentence-transformers==5.1.2
 python-dotenv==1.1.1
-requests==2.32.3
-# clerk-sdk==0.3.7
 cohere==5.20.0
-# tf-keras==2.20.1
 gunicorn==21.2.0

@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
-import requests
+
 import cohere
 import os
 from dotenv import load_dotenv
@@ -13,11 +13,11 @@ router = APIRouter()
 
 QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-HF_API_KEY = os.getenv("HF_API_KEY")
+
 co = cohere.Client(os.getenv("COHERE_API_KEY"))
 
 COLLECTION = "products"
-MODEL_NAME = "microsoft/phi-3-mini-4k-instruct"
+# MODEL_NAME = "microsoft/phi-3-mini-4k-instruct"
 # MODEL_NAME = "tiiuae/falcon-7b-instruct"  
 # MODEL_NAME = "HuggingFaceH4/zephyr-7b-beta"
 # MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"

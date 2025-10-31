@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Depends, HTTPException, Header
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# from clerk import Clerk
+
 import os
 import uvicorn
-import requests
+
 from search import router as search_router
 from dotenv import load_dotenv
 
