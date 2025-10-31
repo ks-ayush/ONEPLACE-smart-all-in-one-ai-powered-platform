@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
-from clerk import Clerk
+# from clerk import Clerk
 import os
 import uvicorn
 import requests
