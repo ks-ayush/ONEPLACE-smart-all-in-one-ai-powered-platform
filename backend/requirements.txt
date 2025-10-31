@@ -7,4 +7,4 @@ requests==2.32.3
 clerk-sdk==0.3.7
 cohere==5.20.0
 tf-keras==2.20.1
-flask-cors==6.0.1
+gunicorn==21.2.0

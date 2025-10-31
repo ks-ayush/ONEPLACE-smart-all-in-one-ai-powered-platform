@@ -50,7 +50,7 @@ Here are the available products:
 {context}
 
 Write a short, conversational reply suggesting one or two top options.
-Do not use markdown, bullet points, or emojis. Include product links directly in the text.
+Do not use markdown, bullet points, or emojis. keep under 200 tokens.
 """
 
     try:
@@ -63,7 +63,7 @@ Do not use markdown, bullet points, or emojis. Include product links directly in
         return response.text.strip()
     except Exception as e:
         print("Cohere API error:", e)
-        return "Sorry, I couldn’t generate a response right now."
+        return "Sorry, I cannot generate a response right now."
 
 
 

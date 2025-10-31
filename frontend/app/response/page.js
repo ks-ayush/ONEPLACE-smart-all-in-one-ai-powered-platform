@@ -16,7 +16,7 @@ const ResponsePage = () => {
         try {
             const res = await axios.post("http://127.0.0.1:8000/api/search", { query });
             setProducts(res.data.results || []);
-            setAiResponse(res.data.ai_message || "No AI suggestions found.");
+            setAiResponse(res.data.ai_message || "No ONEPLACE AI suggestions found.");
         } catch (err) {
             console.error(err);
             setAiResponse("Error fetching data.");

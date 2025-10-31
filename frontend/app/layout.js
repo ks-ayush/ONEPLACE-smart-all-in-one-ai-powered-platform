@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "ONEPLACE",
-  description: "A unified platform for all your needs.",
+  description: "ONEPLACE - AI-Powered Semantic Search for Online Shopping",
 };
 
 export default function RootLayout({ children }) {
