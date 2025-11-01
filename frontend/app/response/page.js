@@ -19,7 +19,7 @@ const ResponsePage = () => {
             setAiResponse(res.data.ai_message || "No ONEPLACE AI suggestions found.");
         } catch (err) {
             console.error(err);
-            setAiResponse("Error fetching data.");
+            setAiResponse("Error fetching data.Please try after some time.");
         } finally {
             setLoading(false);
         }
