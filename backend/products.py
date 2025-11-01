@@ -1,29 +1,33 @@
-from sentence_transformers import SentenceTransformer
+import cohere
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import VectorParams, PointStruct
 from dotenv import load_dotenv
 import os
 
-
 load_dotenv()
 QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+COHERE_API_KEY = os.getenv("COHERE_API_KEY") 
 COLLECTION = "products"
 
-print("Products data preparation started...")
+print("Products data preparation started (using Cohere)...")
 
-if not QDRANT_URL or not QDRANT_API_KEY:
-    raise ValueError("Missing QDRANT_URL or QDRANT_API_KEY in .env file")
+if not QDRANT_URL or not QDRANT_API_KEY or not COHERE_API_KEY:
+    raise ValueError("Missing QDRANT_URL, QDRANT_API_KEY, or COHERE_API_KEY in .env file")
+
 
 client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
+co = cohere.Client(COHERE_API_KEY)
 
+COHERE_MODEL = "embed-english-v3.0"
+VECTOR_DIMENSION = 1024 
 
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
 client.recreate_collection(
     collection_name=COLLECTION,
-    vectors_config=VectorParams(size=384, distance="Cosine"),
+    vectors_config=VectorParams(size=VECTOR_DIMENSION, distance="Cosine"),
 )
+
 
 products = [
     {
@@ -224,33 +228,41 @@ products = [
     "store": "Amazon",
     "product_url": ["https://www.amazon.in/s?k=levi%27s+men%27s+511+slim+fit+jeans&adgrpid=136990852020&hvadid=595889975482&hvdev=c&hvlocphy=9300940&hvnetw=g&hvqmt=e&hvrand=562913030838380612&hvtargid=kwd-300171231048&hydadcr=23458_1935856&mcid=c13b1476526c322a88765ae1083848db&tag=googinhydr1-21&ref=pd_sl_4ypq7jj00f_e"]
   }
+    
 ]
 
-
-points = []
-
-for idx, product in enumerate(products):
-   
+texts_to_embed = []
+for product in products:
     text = (
         f"{product['title']} | {product['brand']} | {product['category']} | "
         f"{product['description']} | Price: ₹{product['price_inr']} | Store: {product['store']}"
     )
+    texts_to_embed.append(text)
 
-    vector = model.encode(text).tolist()
+
+print(f"Getting {len(texts_to_embed)} embeddings from Cohere...")
+embed_response = co.embed(
+    texts=texts_to_embed,
+    model=COHERE_MODEL,
+    input_type="search_document"
+)
+vectors = embed_response.embeddings
+print("Embeddings received.")
+
+points = []
+for idx, (product, vector) in enumerate(zip(products, vectors)):
 
     product["product_url"] = (
         product["product_url"][0] if isinstance(product["product_url"], list) else product["product_url"]
     )
-
-
+    
     points.append(
         PointStruct(
             id=idx + 1,
-            vector=vector,
+            vector=vector,  
             payload=product,
         )
     )
 
-
 client.upsert(collection_name=COLLECTION, points=points)
-print("Products embedded and uploaded to Qdrant successfully!")
+print("Products embedded with Cohere and uploaded to Qdrant successfully!")
