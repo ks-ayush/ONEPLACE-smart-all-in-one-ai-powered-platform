@@ -14,7 +14,7 @@ const ResponsePage = () => {
         if (!query.trim()) return;
         setLoading(true);
         try {
-            const res = await axios.post("http://127.0.0.1:8000/api/search", { query });
+            const res = await axios.post("https://oneplace-smart-all-in-one-ai-powered.onrender.com/api/search", { query });
             setProducts(res.data.results || []);
             setAiResponse(res.data.ai_message || "No ONEPLACE AI suggestions found.");
         } catch (err) {
